@@ -1,0 +1,11 @@
+export declare const VERIFICATION_STATUS: {
+    NOT_SIGNED: number;
+    SIGNED_AND_VALID: number;
+    SIGNED_AND_INVALID: number;
+};
+export declare const SRP_LEN = 2048;
+export declare const AUTH_FALLBACK_VERSION = 2;
+export declare const AUTH_VERSION = 4;
+export declare const MAX_VALUE_ITERATIONS = 1000;
+export declare const SRP_MODULUS_KEY = "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxjMEXAHLgxYJKwYBBAHaRw8BAQdAFurWXXwjTemqjD7CXjXVyKf0of7n9Ctm\nL8v9enkzggHNEnByb3RvbkBzcnAubW9kdWx1c8J3BBAWCgApBQJcAcuDBgsJ\nBwgDAgkQNQWFxOlRjyYEFQgKAgMWAgECGQECGwMCHgEAAPGRAP9sauJsW12U\nMnTQUZpsbJb53d0Wv55mZIIiJL2XulpWPQD/V6NglBd96lZKBmInSXX/kXat\nSv+y0io+LR8i2+jV+AbOOARcAcuDEgorBgEEAZdVAQUBAQdAeJHUz1c9+KfE\nkSIgcBRE3WuXC4oj5a2/U3oASExGDW4DAQgHwmEEGBYIABMFAlwBy4MJEDUF\nhcTpUY8mAhsMAAD/XQD8DxNI6E78meodQI+wLsrKLeHn32iLvUqJbVDhfWSU\nWO4BAMcm1u02t4VKw++ttECPt+HUgPUq5pqQWe5Q2cW4TMsE\n=Y4Mw\n-----END PGP PUBLIC KEY BLOCK-----";
+export declare const BCRYPT_PREFIX = "$2y$10$";
