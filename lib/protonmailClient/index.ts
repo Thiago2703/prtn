@@ -228,13 +228,14 @@ export class ProtonmailClient extends EventEmitter {
             throw new Error("You must login first");
         }
 
-        let key_id: string = "", privateKey: string = "", publicKey: string = "";
+        let key_id: string = "", privateKey: string = "",  privateKey_: string = "",publicKey: string = "", token_: string = "";
         const address = await this.keys.address();
         address.Addresses.forEach(addr => {
             addr.Keys.forEach(key => {
                 if (key.Primary === 1) {
                     //key_id = key.ID;
-                    //privateKey = key.PrivateKey;
+                    token_ = key.Token;
+                    privateKey_ = key.PrivateKey;
                     publicKey = key.PublicKey;
                 }
             });
@@ -248,7 +249,7 @@ export class ProtonmailClient extends EventEmitter {
                 privateKey = key.PrivateKey;
             }
         });
-        
+
        
         let key_salt: string = "";
         const salts = await this.keys.keySalts();
@@ -258,12 +259,39 @@ export class ProtonmailClient extends EventEmitter {
             }
         });
         
-        const passphrase = await computeKeyPassword(passwordInformation.password, key_salt);
-       
+        //console.log("PRIVATE - ", privateKey);
+        //console.log("PUBLIC - ", publicKey);
+        //console.log("key_id - ",key_id);
+        //console.log("key_salt - ",key_salt);
         
-        this.keysInfo_.privateKey = privateKey;
+        const passphrase = await computeKeyPassword(passwordInformation.password, key_salt);
+        //console.log("passphrase - ",passphrase);
+        //console.log("token_", token_);
+        const publicKey_1 = await readKey({
+            armoredKey: publicKey,
+        });
+
+        const privateKey_1 = await decryptKey({
+            privateKey: await readPrivateKey({
+                armoredKey: privateKey,
+            }),
+            passphrase: passphrase,
+        });
+
+        const message_1 = await readMessage({
+            armoredMessage: token_,
+        });
+
+        const { data: decrypted_ } = await decrypt({
+            message: message_1,
+            decryptionKeys: privateKey_1,
+            verificationKeys: publicKey_1,
+        });
+        //console.log(decrypted_);
+        
+        this.keysInfo_.privateKey = privateKey_;
         this.keysInfo_.publicKey = publicKey;
-        this.keysInfo_.passphrase = passphrase;
+        this.keysInfo_.passphrase = decrypted_;
     }
 
     public async decryptMessage(armoredMessage: IMessage) {
